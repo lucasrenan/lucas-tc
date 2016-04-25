@@ -1,0 +1,5 @@
+en-test:
+  v1:
+    attributes:
+      person_test:
+        name: "full_name"
