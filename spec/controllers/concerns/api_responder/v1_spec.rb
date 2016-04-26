@@ -4,6 +4,7 @@ require Rails.root.join('spec/support/models/person_test')
 RSpec.describe ApiResponder::V1, type: :controller do
   controller(ApplicationController) do
     include ::ApiResponder::V1
+    include ::Exceptions
 
     def index
       data = { a: 123, b: 456 }
@@ -25,7 +26,7 @@ RSpec.describe ApiResponder::V1, type: :controller do
     end
 
     def unauthenticated
-      fail NotAuthorized, 'Unauthenticated'
+      raise Exceptions::NotAuthorized
     end
 
     def custom_error
@@ -121,7 +122,7 @@ RSpec.describe ApiResponder::V1, type: :controller do
     let(:json) do
       response_data.merge(errors: {
                             base: [{
-                              message: 'Unauthenticated',
+                              message: 'not authorized',
                               params: {}
                             }]
                           }).to_json
@@ -133,8 +134,8 @@ RSpec.describe ApiResponder::V1, type: :controller do
       get :unauthenticated
     end
 
-    xit { expect(response).to_not be_successful }
-    xit { expect(response.body).to be_json_eql(json) }
+    it { expect(response).to_not be_successful }
+    it { expect(response.body).to be_json_eql(json) }
   end
 
   describe '#render_error_response"' do

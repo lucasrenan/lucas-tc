@@ -2,6 +2,8 @@ class User < ApplicationRecord
   ROLES = ['guest', 'user', 'admin'].freeze
   enum role: ROLES
 
+  has_secure_password
+
   has_many :posts
   has_many :devices
 

@@ -10,6 +10,7 @@ module ApiResponder
       rescue_from 'ActiveRecord::RecordInvalid', with: :return_422
       rescue_from 'ActiveRecord::RecordNotFound', with: :return_404
       rescue_from 'ActionController::ParameterMissing', with: :return_422
+      rescue_from 'Exceptions::NotAuthorized', with: :return_401
     end
 
     def api_response(options = {})
