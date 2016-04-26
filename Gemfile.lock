@@ -43,6 +43,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (7.0.0)
+    bcrypt (3.1.10)
     builder (3.2.2)
     byebug (8.2.4)
     concurrent-ruby (1.0.1)
@@ -161,6 +162,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.0.rc5)
+  bcrypt (~> 3.1.7)
   byebug
   factory_girl_rails (~> 4.7.0)
   json_spec (~> 1.1.4)
