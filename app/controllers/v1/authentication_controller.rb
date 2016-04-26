@@ -4,6 +4,8 @@ module V1
       user = User.find_by({email: user_params[:email]})
 
       if user && user.authenticate(user_params[:password])
+        user.generate_access_token!
+        user.save!
         data = UserSerializer.new(user)
         render json: api_response(data: data), status: :created
       else

@@ -6,6 +6,10 @@ RSpec.describe V1::AuthenticationController, type: :controller do
       let!(:user) { create(:user, email: 'jobs@apple.com', password: '123456') }
 
       before do
+        allow_any_instance_of(User).to receive(:generate_access_token!)
+        allow_any_instance_of(User).to receive(:access_token)
+          .and_return('token_123')
+
         post :create, params: { email: user.email, password: user.password }
       end
 
@@ -17,7 +21,8 @@ RSpec.describe V1::AuthenticationController, type: :controller do
         expect(response_data).to eq({
           'id' => user.id,
           'email' => user.email,
-          'role' => user.role
+          'role' => user.role,
+          'access_token' => 'token_123'
         })
       end
     end

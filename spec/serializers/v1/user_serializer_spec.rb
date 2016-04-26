@@ -10,7 +10,8 @@ RSpec.describe V1::UserSerializer do
       expected_json = {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
+        access_token: user.access_token
       }
 
       expect(subject.to_json).to eq(expected_json.to_json)
