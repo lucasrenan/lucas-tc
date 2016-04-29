@@ -34,7 +34,6 @@ module V1
     end
 
     private
-
     def post
       @post ||= Post.find(params[:id])
     end
