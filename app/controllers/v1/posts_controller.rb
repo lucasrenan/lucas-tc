@@ -14,6 +14,7 @@ module V1
     end
 
     def create
+      authorize(Post)
       post = Post.create!(post_params)
       data = PostSerializer.new(post)
 
@@ -23,6 +24,7 @@ module V1
     end
 
     def update
+      authorize(post)
       post.update!(post_params)
       data = PostSerializer.new(post)
 
@@ -30,6 +32,7 @@ module V1
     end
 
     def destroy
+      authorize(post)
       post.destroy!
     end
 

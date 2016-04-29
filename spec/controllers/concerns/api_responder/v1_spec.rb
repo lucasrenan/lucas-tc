@@ -26,7 +26,11 @@ RSpec.describe ApiResponder::V1, type: :controller do
     end
 
     def unauthenticated
-      raise Exceptions::NotAuthorized
+      raise Exceptions::NotAuthenticated
+    end
+
+    def not_authorized
+      raise Pundit::NotAuthorizedError
     end
 
     def custom_error
@@ -122,7 +126,7 @@ RSpec.describe ApiResponder::V1, type: :controller do
     let(:json) do
       response_data.merge(errors: {
                             base: [{
-                              message: 'not authorized',
+                              message: 'Not authenticated',
                               params: {}
                             }]
                           }).to_json
@@ -132,6 +136,26 @@ RSpec.describe ApiResponder::V1, type: :controller do
       routes.draw { get 'unauthenticated' => 'anonymous#unauthenticated' }
       expect(controller).to receive(:log_exception)
       get :unauthenticated
+    end
+
+    it { expect(response).to_not be_successful }
+    it { expect(response.body).to be_json_eql(json) }
+  end
+
+  context 'when not authorized' do
+    let(:json) do
+      response_data.merge(errors: {
+                            base: [{
+                              message: 'Not authorized',
+                              params: {}
+                            }]
+                          }).to_json
+    end
+
+    before do
+      routes.draw { get 'not_authorized' => 'anonymous#not_authorized' }
+      expect(controller).to receive(:log_exception)
+      get :not_authorized
     end
 
     it { expect(response).to_not be_successful }
