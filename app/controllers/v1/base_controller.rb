@@ -3,5 +3,6 @@ module V1
     include Authentication
     include ApiResponder::V1
     include Exceptions
+    include Pundit
   end
 end

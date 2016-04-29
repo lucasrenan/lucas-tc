@@ -11,7 +11,7 @@ module V1
         data = UserSerializer.new(user)
         render json: api_response(data: data), status: :created
       else
-        raise Exceptions::NotAuthorized
+        raise Exceptions::NotAuthenticated
       end
     end
 

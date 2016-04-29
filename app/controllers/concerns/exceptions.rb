@@ -1,7 +1,7 @@
 module Exceptions
-  class NotAuthorized < StandardError
+  class NotAuthenticated < StandardError
     def message
-      'not authorized'
+      'Not authenticated'
     end
   end
 end

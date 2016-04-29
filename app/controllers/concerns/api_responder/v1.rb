@@ -10,7 +10,8 @@ module ApiResponder
       rescue_from 'ActiveRecord::RecordInvalid', with: :return_422
       rescue_from 'ActiveRecord::RecordNotFound', with: :return_404
       rescue_from 'ActionController::ParameterMissing', with: :return_422
-      rescue_from 'Exceptions::NotAuthorized', with: :return_401
+      rescue_from 'Exceptions::NotAuthenticated', with: :return_401
+      rescue_from 'Pundit::NotAuthorizedError', with: :return_403
     end
 
     def api_response(options = {})
@@ -44,6 +45,11 @@ module ApiResponder
     def return_401(exception)
       log_exception(exception)
       render_error_response(exception.message, 401)
+    end
+
+    def return_403(exception)
+      log_exception(exception)
+      render_error_response('Not authorized', 403)
     end
 
     def return_404(exception)

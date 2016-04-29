@@ -40,7 +40,7 @@ RSpec.describe V1::AuthenticationController, type: :controller do
         end
 
         it 'returns error with message' do
-          expect(response_errors['base'][0]['message']).to eq('not authorized')
+          expect(response_errors['base'][0]['message']).to eq('Not authenticated')
         end
       end
 
@@ -54,7 +54,7 @@ RSpec.describe V1::AuthenticationController, type: :controller do
         end
 
         it 'returns error with message' do
-          expect(response_errors['base'][0]['message']).to eq('not authorized')
+          expect(response_errors['base'][0]['message']).to eq('Not authenticated')
         end
       end
 
@@ -68,7 +68,7 @@ RSpec.describe V1::AuthenticationController, type: :controller do
         end
 
         it 'returns error with message' do
-          expect(response_errors['base'][0]['message']).to eq('not authorized')
+          expect(response_errors['base'][0]['message']).to eq('Not authenticated')
         end
       end
     end
