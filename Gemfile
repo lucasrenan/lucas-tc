@@ -32,3 +32,7 @@ group :test do
   gem 'shoulda-matchers', '~> 3.1.1'
   gem 'factory_girl_rails', '~> 4.7.0'
 end
+
+group :production do
+  gem 'rails_12factor'
+end
