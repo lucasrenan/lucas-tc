@@ -14,123 +14,143 @@ RSpec.describe V1::PostsController, type: :controller do
   describe 'GET #index' do
     let!(:post) { create(:post) }
 
-    before do
-      get :index
-    end
-
-    it 'returns success' do
-      expect(response).to be_success
-    end
-
-    it 'returns data with posts' do
-      expect(response_data).to eq([{
-        'id' => post.id,
-        'title' => post.title,
-        'text' => post.text,
-        'user_id'=> post.user_id
-      }])
-    end
-  end
-
-  describe "GET #show" do
-    let!(:post) { create(:post) }
-
-    before do
-      get :show, params: { id: post.id }
-    end
-
-    it 'returns success' do
-      expect(response).to be_success
-    end
-
-    it 'returns data with post' do
-      expect(response_data).to eq({
-        'id' => post.id,
-        'title' => post.title,
-        'text' => post.text,
-        'user_id'=> post.user_id
-      })
-    end
-  end
-
-  describe 'POST #create' do
-    context 'with valid params' do
-      it 'returns created' do
-        post :create, params: valid_attributes
-
-        expect(response).to be_created
-      end
-
-      it 'creates a new post' do
-        expect {
-          post :create, params: valid_attributes
-        }.to change(Post, :count).by(1)
-      end
-    end
-
-    context 'with invalid params' do
-      it 'retuns unprocessable entity' do
-        post :create, params: invalid_attributes
-
-        expect(response).to be_unprocessable
-      end
-
-      it 'does not create a new post' do
-        expect {
-          post :create, params: invalid_attributes
-        }.to_not change(Post, :count).from(0)
-      end
-    end
-  end
-
-  describe 'PUT #update' do
-    context 'with valid params' do
-      let!(:post) { create(:post) }
+    context 'when admin is authenticated' do
+      include_context 'authenticated admin'
 
       before do
-        put :update, params: { id: post.id, title: 'updated title' }
+        get :index
       end
 
       it 'returns success' do
         expect(response).to be_success
       end
 
-      it 'updates the requested post' do
-        expect(post.reload.title).to eq('updated title')
+      it 'returns data with posts' do
+        expect(response_data).to eq([{
+          'id' => post.id,
+          'title' => post.title,
+          'text' => post.text,
+          'user_id'=> post.user_id
+        }])
       end
     end
+  end
 
-    context 'with invalid params' do
-      let!(:post) { create(:post) }
+  describe "GET #show" do
+    let!(:post) { create(:post) }
+
+    context 'when admin is authenticated' do
+      include_context 'authenticated admin'
 
       before do
-        put :update, params: { id: post.id, title: '' }
+        get :show, params: { id: post.id }
       end
 
-      it 'returns unprocessable entity' do
-        expect(response).to be_unprocessable
+      it 'returns success' do
+        expect(response).to be_success
       end
 
-      it 'does not update the requested post' do
-        title = post.title
-        expect(post.reload.title).to eq(title)
+      it 'returns data with post' do
+        expect(response_data).to eq({
+          'id' => post.id,
+          'title' => post.title,
+          'text' => post.text,
+          'user_id'=> post.user_id
+        })
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    context 'when admin is authenticated' do
+      include_context 'authenticated admin'
+
+      context 'with valid params' do
+        it 'returns created' do
+          post :create, params: valid_attributes
+
+          expect(response).to be_created
+        end
+
+        it 'creates a new post' do
+          expect {
+            post :create, params: valid_attributes
+          }.to change(Post, :count).by(1)
+        end
+      end
+
+      context 'with invalid params' do
+        it 'retuns unprocessable entity' do
+          post :create, params: invalid_attributes
+
+          expect(response).to be_unprocessable
+        end
+
+        it 'does not create a new post' do
+          expect {
+            post :create, params: invalid_attributes
+          }.to_not change(Post, :count).from(0)
+        end
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    context 'when admin is authenticated' do
+      include_context 'authenticated admin'
+
+      context 'with valid params' do
+        let!(:post) { create(:post) }
+
+        before do
+          put :update, params: { id: post.id, title: 'updated title' }
+        end
+
+        it 'returns success' do
+          expect(response).to be_success
+        end
+
+        it 'updates the requested post' do
+          expect(post.reload.title).to eq('updated title')
+        end
+      end
+
+      context 'with invalid params' do
+        let!(:post) { create(:post) }
+
+        before do
+          put :update, params: { id: post.id, title: '' }
+        end
+
+        it 'returns unprocessable entity' do
+          expect(response).to be_unprocessable
+        end
+
+        it 'does not update the requested post' do
+          title = post.title
+          expect(post.reload.title).to eq(title)
+        end
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    let!(:post) { create(:post) }
+    context 'when admin is authenticated' do
+      include_context 'authenticated admin'
 
-    it 'returns no content' do
-      delete :destroy, params: { id: post.id }
+      let!(:post) { create(:post) }
 
-      expect(response).to be_no_content
-    end
-
-    it 'destroys the requested post' do
-      expect {
+      it 'returns no content' do
         delete :destroy, params: { id: post.id }
-      }.to change(Post, :count).by(-1)
+
+        expect(response).to be_no_content
+      end
+
+      it 'destroys the requested post' do
+        expect {
+          delete :destroy, params: { id: post.id }
+        }.to change(Post, :count).by(-1)
+      end
     end
   end
 end
