@@ -27,6 +27,11 @@ Install gems
   bundle install
 ```
 
+Copy database.yml
+```bash
+  cp config/database.yml.example config/database.yml
+```
+
 Run migrations
 ```bash
   rake db:migrate
